@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+  # databases
   catalogdb:
     container_name: catalogdb
     restart: always
@@ -8,7 +9,13 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db # this info is from docker hub
-      
+  
+  basketdb:
+    container_name: basketdb
+    restart: always
+    ports:
+      - "6379:6379"     
+  
   catalog.api:
     container_name: catalog.api
     environment:
@@ -18,3 +25,12 @@ services:
       - catalogdb # make sure db image is deployed b4 this one
     ports:
       - "8000:80" # Expose to 8000 localhost  
+
+  basket.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "CacheSettings__ConnectionString=basketdb:6379"
+    depends_on:
+      - basketdb
+    ports:
+      - "8001:80"
