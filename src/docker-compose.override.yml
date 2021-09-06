@@ -14,7 +14,29 @@ services:
     container_name: basketdb
     restart: always
     ports:
-      - "6379:6379"     
+      - "6379:6379" 
+
+  sqlserverdb:
+    container_name: sqlserverdb
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "SA_PASSWORD=Abc123:::"
+      - "MSSQL_PID=Developer"
+    restart: always
+    ports:
+      - "1433:1433"
+    # connecting from management studio : 127.0.0.1, 1433
+    #volumes:
+    #  - Known issues : Mounting a volume does not work on Docker for Mac      
+
+  portainer:
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
   
   catalog.api:
     container_name: catalog.api
@@ -34,3 +56,12 @@ services:
       - basketdb
     ports:
       - "8001:80"
+
+  discount.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings__DiscountAPIContext=Server=sqlserverdb;Database=DiscountDb;User Id=sa;Password=Abc123:::"
+    depends_on:
+      - sqlserverdb
+    ports:
+      - "8002:80"

@@ -9,13 +9,6 @@ using Newtonsoft.Json;
 
 namespace Basket.API.Repositories
 {
-    public interface IBasketRepository
-    {
-        Task<ShoppingCart> GetBasketAsync(string userName, CancellationToken cancellationToken);
-        Task UpdateBasketAsync(ShoppingCart shoppingCart, CancellationToken cancellationToken);
-        Task DeleteBasketAsync(string userName, CancellationToken cancellationToken);
-    }
-
     public class BasketRepository : IBasketRepository
     {
         private readonly IDistributedCache _distributedCache;

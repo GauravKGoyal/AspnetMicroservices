@@ -7,6 +7,12 @@ services:
   basketdb:
     image: redis
 
+  sqlserverdb:
+    image: mcr.microsoft.com/mssql/server
+
+  portainer:
+    image: portainer/portainer-ce
+    
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:
@@ -19,6 +25,12 @@ services:
       context: .
       dockerfile: Services/Basket/Basket.API/Dockerfile
 
-# volumens are storage that is outside of the container and exist on the host file system  
-volumes:
+  discount.api:
+    image: ${DOCKER_REGISTRY-}discountapi
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.API/Dockerfile
+
+volumes: # volumens are storage that is outside of the container and exist on the host file system  
   mongo_data:
+  portainer_data:

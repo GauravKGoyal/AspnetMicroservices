@@ -7,7 +7,7 @@ using Basket.API.Repositories;
 namespace Basket.API.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/basket")]
     public class BasketController : ControllerBase
     {
         private readonly IBasketRepository _basketRepository;
